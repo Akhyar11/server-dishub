@@ -1,8 +1,10 @@
 import express from "express";
+import jwt from "jsonwebtoken";
 
 // Controllers
 import { userController } from "../controllers/userController.js";
 import { adminController } from "../controllers/adminController.js";
+import { authRefreshToken } from "../middlewares/authMiddleware.js";
 
 class Authentication{
     constructor(){
@@ -21,6 +23,14 @@ class Authentication{
         
         // General routers
         this.router.delete("/logout", userController.logout);
+        this.router.get("/token", authRefreshToken, (req, res) => {
+            const userId = req.userId;
+            const username = req.username;
+            const level = req.level;
+
+            const accsessToken = jwt.sign({userId, username, level}, process.env.ACCSESS_TOKEN_SECRET, {expiresIn: "20s"});
+            res.status(200).json({accsessToken})
+        })
     }
 }
 

@@ -12,7 +12,11 @@ class Todo{
 
     useRouters(){
         this.router.get("/", authVerifyToken, todoContorller.getAll);
-        this.router.post("/", authVerifyTokenForAdmin, todoContorller.createTodo)
+        this.router.post("/", authVerifyTokenForAdmin, todoContorller.createTodo);
+        this.router.delete("/kecamatan/:id", authVerifyTokenForAdmin, todoContorller.deleteKecamatan);
+        this.router.delete("/rambu/:id", authVerifyTokenForAdmin, todoContorller.deleteRambu);
+        this.router.put("/update/rambu/:id", authVerifyTokenForAdmin, todoContorller.updateRambu);
+        this.router.put("/update/kecamatan/:id", authVerifyTokenForAdmin, todoContorller.updateKecamatan);
     }
 }
 

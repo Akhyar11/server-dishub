@@ -39,7 +39,7 @@ export class UserController{
 
     async register(req, res){
         const { username, pass, name} = req.body;
-        const id = name + "-" + new Date().getTime().toString();
+        const id = "User" + "-" + new Date().getTime().toString();
         const level = "User";
         dotenv.config();
         try {

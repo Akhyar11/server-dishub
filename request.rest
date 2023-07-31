@@ -21,8 +21,9 @@ Content-Type: application/json
 
 ###
 POST http://localhost:5000/api/v1/todo/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBZG1pbi0xNjkwNzcyODM5MjIwIiwidXNlcm5hbWUiOiJhZG1pbiIsImlhdCI6MTY5MDc4MjgxMCwiZXhwIjoxNjkwNzgyODMwfQ.JY-zE1JLeLVc__Q7A1pJ76pcM7qOr9JyucpheVSe48g
 Content-Type: application/json
-Authorization: Bearer 
+
 { 
     "kecamatan": "kemusu", 
     "jalan": "bawu-klwor", 
@@ -37,4 +38,24 @@ Authorization: Bearer
 
 ###
 GET http://localhost:5000/api/v1/todo/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBZG1pbi0xNjkwNzcyODM5MjIwIiwidXNlcm5hbWUiOiJhZG1pbiIsImxldmVsIjoiQWRtaW4iLCJpYXQiOjE2OTA3NzY2MTcsImV4cCI6MTY5MDc3NjYzN30.-69iEuMowFlP0wQY_cHXnAlSns3lv_WD7QyIgNxTUaE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBZG1pbi0xNjkwNzcyODM5MjIwIiwidXNlcm5hbWUiOiJhZG1pbiIsImlhdCI6MTY5MDc4MjIwOSwiZXhwIjoxNjkwNzgyMjI5fQ.ZVn22N8fUKRXfha2ZYW3I2NXXXsbdGL6C4WNdpH3y7U
+
+###
+GET http://localhost:5000/api/v1/auth/token
+
+###
+PUT http://localhost:5000/api/v1/todo/update/kecamatan/kemusu-1690775993635
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBZG1pbi0xNjkwNzcyODM5MjIwIiwidXNlcm5hbWUiOiJhZG1pbiIsImlhdCI6MTY5MDc4NTU4MCwiZXhwIjoxNjkwNzg1NjAwfQ.1bJ_mSl9b7PzqTIOaPWvlJg6qhe3GXkvHMHjyhp00dE
+Content-Type: application/json
+
+{ 
+    "kecamatan": "kemusu", 
+    "jalan": "bawu-klwor", 
+    "jenis_rambu": "hati-hati", 
+    "gambar": "", 
+    "kanan": true, 
+    "kiri": false,
+    "tengah": false, 
+    "titik_pangkal": "bawu", 
+    "titik_ujung": "jamban" 
+}

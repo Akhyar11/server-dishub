@@ -39,7 +39,7 @@ class AdminController{
 
     async register(req, res){
         const { username, pass, name} = req.body;
-        const id = username + "-" + new Date().getTime().toString();
+        const id = "Admin" + "-" + new Date().getTime().toString();
         const level = "Admin";
         try {
             const user = await Admin.findAll({
