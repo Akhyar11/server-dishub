@@ -18,3 +18,23 @@ Content-Type: application/json
     "pass": "admin",
     "name": "Muhammad Akhyar"
 }
+
+###
+POST http://localhost:5000/api/v1/todo/
+Content-Type: application/json
+Authorization: Bearer 
+{ 
+    "kecamatan": "kemusu", 
+    "jalan": "bawu-klwor", 
+    "jenis_rambu": "hati-hati", 
+    "gambar": "", 
+    "kanan": true, 
+    "kiri": false,
+    "tengah": false, 
+    "titik_pangkal": "bawu", 
+    "titik_ujung": "klewor" 
+}
+
+###
+GET http://localhost:5000/api/v1/todo/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBZG1pbi0xNjkwNzcyODM5MjIwIiwidXNlcm5hbWUiOiJhZG1pbiIsImxldmVsIjoiQWRtaW4iLCJpYXQiOjE2OTA3NzY2MTcsImV4cCI6MTY5MDc3NjYzN30.-69iEuMowFlP0wQY_cHXnAlSns3lv_WD7QyIgNxTUaE

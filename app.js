@@ -3,8 +3,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
 import db from "./utils/connection.js";
-import Authentication from "./routers/index.js";
+import Authentication from "./routers/auth.js";
 import dotenv from "dotenv";
+import Todo from "./routers/todo.js";
 
 class App{
     constructor(){
@@ -29,7 +30,11 @@ class App{
     }
 
     router(){
+        // Auth
         this.app.use("/api/v1/auth", Authentication);
+
+        // Todo
+        this.app.use("/api/v1/todo/", Todo)
     }
 }
 

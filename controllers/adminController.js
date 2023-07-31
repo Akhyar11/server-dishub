@@ -20,9 +20,10 @@ class AdminController{
             const confPass = await bcrypt.compare(pass, user[0].pass);
             if(!confPass) return res.status(400).json({msg: "Password salah"});
             const userId = user[0].id;
+            const level = user[0].level;
 
-            const accsessToken = jwt.sign({userId, username}, process.env.ACCSESS_TOKEN_SECRET, {expiresIn: "20s"});
-            const refreshToken = jwt.sign({userId, username}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: "5m"});
+            const accsessToken = jwt.sign({userId, username, level}, process.env.ACCSESS_TOKEN_SECRET, {expiresIn: "20s"});
+            const refreshToken = jwt.sign({userId, username, level}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: "5m"});
 
             res.cookie("token", refreshToken, {
                 httpOnly: true,
