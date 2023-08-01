@@ -1,3 +1,5 @@
+import fs from "fs";
+
 import Rambu from "../models/rambuModel.js";
 import Kecamatan from "../models/kecamatanModel.js";
 
@@ -49,6 +51,79 @@ class TodoController{
         } catch (err) {
             console.log(err)
             return res.status(400).json({msg: "gagal membuat data rambu"});
+        }
+    }
+
+    async addPicture(req, res){
+        const id_rambu = req.params.id;
+        const path = req.file.destination+req.file.originalname;
+        try{
+            const gambar = process.env.HOST+process.env.PORT+"/"+path;
+            await Rambu.update({ gambar }, {
+                where: {
+                    id_rambu
+                }
+            })
+
+            return res.status(200).json({msg: "berhasil upload gambar"});
+        } catch(err){
+            console.log(err)
+            return res.status(400).json({msg: "gagal upload gambar"});
+        }
+    }
+
+    async delatePicture(req, res){
+        const id_rambu = req.params.id;
+        try{
+            const rambu = await Rambu.findAll({
+                where: {
+                    id_rambu
+                }
+            })
+            const path = rambu[0].gambar.split(process.env.HOST+process.env.PORT+"/");
+            
+            if(path.length == 0) return res.status(200).json({msg: "berhasil hapus gambar"});
+            
+            await Rambu.update({ gambar: "" }, {
+                where: {
+                    id_rambu
+                }
+            })
+
+            fs.unlinkSync(path[1]);
+
+            return res.status(200).json({msg: "berhasil hapus gambar"});
+        } catch(err){
+            console.log(err)
+            return res.status(400).json({msg: "gagal hapus gambar"});
+        }
+    }
+
+    async updatePicture(req, res){
+        const id_rambu = req.params.id;
+        try{
+            const rambu = await Rambu.findAll({
+                where: {
+                    id_rambu
+                }
+            })
+            const path = rambu[0].gambar.split(process.env.HOST+process.env.PORT+"/");
+            
+            if(path.length == 0) return res.status(200).json({msg: "data gambar tidak tersedia"});
+    
+            fs.unlinkSync(path[1]);
+
+            const gambar = process.env.HOST+process.env.PORT+"/"+req.file.destination+req.file.originalname;
+            await Rambu.update({ gambar }, {
+                where: {
+                    id_rambu
+                }
+            })
+
+            return res.status(200).json({msg: "berhasil update gambar"});
+        } catch(err){
+            console.log(err)
+            return res.status(400).json({msg: "gagal update gambar"});
         }
     }
 
