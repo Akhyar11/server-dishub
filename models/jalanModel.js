@@ -1,17 +1,22 @@
 import { Sequelize } from "sequelize";
 import db from "../utils/connection.js";
-import Rambu from "./rambuModel.js";
 
 const { DataTypes } = Sequelize;
 
-const Kecamatan = db.define(
-  "kecamatan",
+const Jalan = db.define(
+  "jalan",
   {
-    id_kecamatan: {
+    id_jalan: {
       primaryKey: true,
       type: DataTypes.STRING,
     },
     kecamatan: {
+      type: DataTypes.STRING,
+    },
+    titik_pangkal: {
+      type: DataTypes.STRING,
+    },
+    titik_ujung: {
       type: DataTypes.STRING,
     },
   },
@@ -20,4 +25,4 @@ const Kecamatan = db.define(
   }
 );
 
-export default Kecamatan;
+export default Jalan;

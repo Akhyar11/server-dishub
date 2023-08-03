@@ -26,7 +26,6 @@ Content-Type: application/json
 
 { 
     "kecamatan": "kemusu", 
-    "jalan": "bawu-klwor", 
     "jenis_rambu": "hati-hati", 
     "gambar": "", 
     "kanan": true, 
