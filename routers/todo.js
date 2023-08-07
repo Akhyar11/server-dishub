@@ -3,10 +3,7 @@ import multer from "multer";
 
 // Controllers
 import { todoContorller } from "../controllers/todoContorller.js";
-import {
-  authVerifyToken,
-  authVerifyTokenForAdmin,
-} from "../middlewares/authMiddleware.js";
+import { authVerifyTokenForAdmin } from "../middlewares/authMiddleware.js";
 
 class Todo {
   constructor() {
@@ -25,6 +22,7 @@ class Todo {
 
   useRouters() {
     this.router.get("/", todoContorller.getAll);
+    this.router.get("/jalan/:id", todoContorller.getJalanById);
     this.router.post("/", todoContorller.createTodo);
     this.router.delete(
       "/kecamatan/:id",
