@@ -22,6 +22,23 @@ class TodoController {
     }
   }
 
+  async getJalanById(req, res) {
+    const id_jalan = req.params.id;
+    try {
+      const ruasJalan = await Jalan.findAll({
+        where: {
+          id_jalan: {
+            [Op.like]: `%${id_jalan}%`,
+          },
+        },
+      });
+      const data = { ruasJalan };
+      res.status(200).json({ data });
+    } catch (err) {
+      res.status(400).json({ msg: "gagal mengambil data jalan" });
+    }
+  }
+
   async createTodo(req, res) {
     const {
       kecamatan,
