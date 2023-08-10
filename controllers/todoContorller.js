@@ -1,5 +1,4 @@
 import fs from "fs";
-import { Op } from "sequelize";
 import Rambu from "../models/rambuModel.js";
 import Kecamatan from "../models/kecamatanModel.js";
 import Jalan from "../models/jalanModel.js";
@@ -19,47 +18,6 @@ class TodoController {
     } catch (err) {
       console.log(err);
       return res.status(400).json({ msg: "gagal mengambil data rambu" });
-    }
-  }
-
-  async getJalanById(req, res) {
-    const id_jalan = req.params.id;
-    try {
-      const ruasJalan = await Jalan.findAll({
-        where: {
-          id_jalan: {
-            [Op.like]: `%${id_jalan}%`,
-          },
-        },
-      });
-      const data = { ruasJalan };
-      res.status(200).json({ data });
-    } catch (err) {
-      console.log(err);
-      res.status(400).json({ msg: "gagal mengambil data jalan" });
-    }
-  }
-
-  async getJalanWithRambuById(req, res) {
-    Jalan.hasOne(Rambu, { foreignKey: "id_jalan" });
-    Jalan.belongsTo(Rambu, { foreignKey: "id_jalan" });
-    const id_jalan = req.params.id;
-    try {
-      const ruasJalan = await Jalan.findAll({
-        where: {
-          id_jalan,
-        },
-      });
-      const rambu = await Rambu.findAll({
-        where: {
-          id_jalan,
-        },
-      });
-      const data = { ruasJalan, rambu };
-      res.status(200).json({ data });
-    } catch (err) {
-      console.log(err);
-      res.status(400).json({ msg: "gagal mengambil data jalan" });
     }
   }
 
