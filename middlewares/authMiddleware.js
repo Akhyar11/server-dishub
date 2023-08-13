@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 
 export const authRefreshToken = (req, res, next) => {
+    console.log(req.cookies);
     const token = req.cookies.token;
     if(!token) return res.status(400).json({msg: "harap login dulu"});
     jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {

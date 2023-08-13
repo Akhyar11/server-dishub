@@ -24,7 +24,7 @@ class App {
 
   plugins() {
     this.app.use("/public", express.static(path.join("public")));
-    this.app.use(cors());
+    this.app.use(cors({ credentials: true }));
     this.app.use(express.json());
     this.app.use(cookieParser());
   }

@@ -29,7 +29,7 @@ class Authentication{
             const level = req.level;
 
             const accsessToken = jwt.sign({userId, username, level}, process.env.ACCSESS_TOKEN_SECRET, {expiresIn: "20s"});
-            res.status(200).json({accsessToken})
+            res.status(200).json({ accsessToken });
         })
     }
 }
