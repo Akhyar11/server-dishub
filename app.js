@@ -6,7 +6,6 @@ import db from "./utils/connection.js";
 import Authentication from "./routers/auth.js";
 import dotenv from "dotenv";
 import Todo from "./routers/todo.js";
-import Jalan from "./models/jalanModel.js";
 
 class App {
   constructor() {

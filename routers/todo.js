@@ -4,15 +4,16 @@ import multer from "multer";
 // Controllers
 import { todoContorller } from "../controllers/todoContorller.js";
 import { authVerifyTokenForAdmin } from "../middlewares/authMiddleware.js";
+import { jalanController } from "../controllers/jalanController.js";
 
 class Todo {
   constructor() {
     this.router = express.Router();
     this.storage = multer.diskStorage({
-      destination: (req, res, cb) => {
+      destination: (_, res, cb) => {
         cb(null, "./public/rambu/");
       },
-      filename: (req, file, cb) => {
+      filename: (_, file, cb) => {
         cb(null, file.originalname);
       },
     });
@@ -23,6 +24,20 @@ class Todo {
   useRouters() {
     this.router.get("/", todoContorller.getAll);
     this.router.get("/jalan/:id", todoContorller.getJalanById);
+    this.router.get("/jalan/:id", jalanController.getJalanById);
+    this.router.get("/jalan/gambar/:id", jalanController.getPicture);
+    this.router.get("/jalan/rambu/:id", jalanController.getJalanWithRambuById);
+    this.router.delete(
+      "/jalan/:id",
+      authVerifyTokenForAdmin,
+      jalanController.deleteJalan
+    );
+    this.router.post(
+      "/jalan/gambar",
+      this.uplaod.single("picture"),
+      jalanController.addPicture
+    );
+    this.router.delete("/delate/jalan/gambar", jalanController.delatePicture);
     this.router.post("/", todoContorller.createTodo);
     this.router.delete(
       "/kecamatan/:id",
