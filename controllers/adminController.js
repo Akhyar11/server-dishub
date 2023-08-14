@@ -28,13 +28,7 @@ class AdminController {
         { expiresIn: "5m" }
       );
 
-      res.cookie("token", refreshToken, {
-        httpOnly: true,
-        maxAge: 5 * 60 * 1000,
-        secure: true,
-      });
-
-      //   console.log(req.cookies);
+      await Admin.update({ token: refreshToken }, { where: { username } });
 
       return res.status(200).json({ accsessToken });
     } catch (err) {

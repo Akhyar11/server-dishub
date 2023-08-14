@@ -4,6 +4,27 @@ import Rambu from "../models/rambuModel.js";
 import { Op } from "sequelize";
 
 class JalanController {
+  async addJalan(req, res) {
+    const { kecamatan, titik_pangkal, titik_ujung } = req.body;
+    const id_jalan =
+      titik_pangkal + "-" + titik_ujung + "-" + new Date().getTime().toString();
+    try {
+      const jalan = await Jalan.findAll({
+        where: {
+          kecamatan,
+          titik_pangkal,
+          titik_ujung,
+        },
+      });
+      if (jalan.length !== 0)
+        return res.status(400).json({ msg: "jalan sudah tersedia" });
+      await Jalan.create({ id_jalan, kecamatan, titik_pangkal, titik_ujung });
+      return res.status(200).json({ msg: "data jalan telah dibuat" });
+    } catch (err) {
+      res.status(400).json({ msg: "data jalan gagal dibuat" });
+    }
+  }
+
   async getJalanById(req, res) {
     const id_jalan = req.params.id;
     try {

@@ -24,6 +24,11 @@ class Todo {
   useRouters() {
     this.router.get("/", todoContorller.getAll);
     this.router.get("/jalan/:id", todoContorller.getJalanById);
+    this.router.post(
+      "/jalan",
+      authVerifyTokenForAdmin,
+      jalanController.addJalan
+    );
     this.router.get("/jalan/:id", jalanController.getJalanById);
     this.router.get("/jalan/gambar/:id", jalanController.getPicture);
     this.router.get("/jalan/rambu/:id", jalanController.getJalanWithRambuById);
