@@ -8,12 +8,14 @@ class JalanController {
     const { kecamatan, titik_pangkal, titik_ujung } = req.body;
     const id_jalan =
       titik_pangkal + "-" + titik_ujung + "-" + new Date().getTime().toString();
+    const pencarian = kecamatan + titik_pangkal + titik_ujung + id_jalan;
     try {
       const jalan = await Jalan.findAll({
         where: {
           kecamatan,
           titik_pangkal,
           titik_ujung,
+          pencarian,
         },
       });
       if (jalan.length !== 0)
@@ -26,12 +28,12 @@ class JalanController {
   }
 
   async getJalanById(req, res) {
-    const id_jalan = req.params.id;
+    const pencarianParams = req.params.id;
     try {
       const ruasJalan = await Jalan.findAll({
         where: {
-          id_jalan: {
-            [Op.like]: `%${id_jalan}%`,
+          pencarian: {
+            [Op.like]: `%${pencarianParams}%`,
           },
         },
       });

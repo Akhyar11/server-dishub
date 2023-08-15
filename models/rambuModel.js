@@ -13,26 +13,18 @@ const Rambu = db.define(
     id_jalan: {
       type: DataTypes.STRING,
     },
-    kecamatan: {
-      type: DataTypes.STRING,
-    },
-    jalan: {
-      type: DataTypes.STRING,
-    },
     jenis_rambu: {
       type: DataTypes.STRING,
     },
     gambar: {
       type: DataTypes.STRING,
     },
-    kanan: {
-      type: DataTypes.BOOLEAN,
+    posisi: {
+      type: DataTypes.ENUM,
+      values: ["kanan", "kiri", "tengah"],
     },
-    kiri: {
-      type: DataTypes.BOOLEAN,
-    },
-    tengah: {
-      type: DataTypes.BOOLEAN,
+    pencarian: {
+      type: DataTypes.STRING,
     },
   },
   {

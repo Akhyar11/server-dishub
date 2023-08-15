@@ -19,6 +19,9 @@ const Jalan = db.define(
     titik_ujung: {
       type: DataTypes.STRING,
     },
+    pencarian: {
+      type: DataTypes.STRING,
+    },
   },
   {
     freezeTableName: true,
