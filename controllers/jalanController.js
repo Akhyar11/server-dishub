@@ -9,18 +9,24 @@ class JalanController {
     const id_jalan =
       titik_pangkal + "-" + titik_ujung + "-" + new Date().getTime().toString();
     const pencarian = kecamatan + titik_pangkal + titik_ujung + id_jalan;
+    console.log({ pencarian });
     try {
       const jalan = await Jalan.findAll({
         where: {
           kecamatan,
           titik_pangkal,
           titik_ujung,
-          pencarian,
         },
       });
       if (jalan.length !== 0)
         return res.status(400).json({ msg: "jalan sudah tersedia" });
-      await Jalan.create({ id_jalan, kecamatan, titik_pangkal, titik_ujung });
+      await Jalan.create({
+        id_jalan,
+        kecamatan,
+        titik_pangkal,
+        titik_ujung,
+        pencarian,
+      });
       return res.status(200).json({ msg: "data jalan telah dibuat" });
     } catch (err) {
       res.status(400).json({ msg: "data jalan gagal dibuat" });
@@ -98,6 +104,12 @@ class JalanController {
     const id_jalan = req.params.id;
     try {
       await Jalan.destroy({
+        where: {
+          id_jalan,
+        },
+      });
+
+      await Rambu.destroy({
         where: {
           id_jalan,
         },

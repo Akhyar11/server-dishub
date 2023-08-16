@@ -2,17 +2,24 @@ import jwt from "jsonwebtoken";
 import Admin from "../models/adminModel.js";
 
 export const authRefreshToken = async (req, res, next) => {
-  const { username } = req.body;
+  const { token } = req.body;
   try {
-    const admin = await Admin.findAll({ where: { username } });
-    const token = admin[0].token;
-    jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-      if (err) return res.status(400).json({ msg: "Harap login dulu" });
-      req.userId = decoded.userId;
-      req.username = decoded.username;
-      req.lavel = decoded.level;
-      next();
-    });
+    jwt.verify(
+      token,
+      process.env.REFRESH_TOKEN_SECRET,
+      async (err, decoded) => {
+        if (err) return res.status(400).json({ msg: "Harap login dulu" });
+        req.userId = decoded.userId;
+        req.username = decoded.username;
+        req.lavel = decoded.level;
+        const admin = await Admin.findAll({
+          where: { username: req.username },
+        });
+        if (admin.length <= 0)
+          return res.status(400).json({ msg: "token tidak cocok dengan user" });
+        next();
+      }
+    );
   } catch (err) {
     console.log(err);
   }
@@ -37,8 +44,6 @@ export const authVerifyTokenForAdmin = (req, res, next) => {
   jwt.verify(token, process.env.ACCSESS_TOKEN_SECRET, (err, decoded) => {
     if (err) return res.status(403).json({ msg: "akses token tidak cocok" });
     const level = decoded.level;
-    console.log(decoded);
-
     if (level != "Admin")
       return res
         .status(403)

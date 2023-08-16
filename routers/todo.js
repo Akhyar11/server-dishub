@@ -22,8 +22,8 @@ class Todo {
   }
 
   useRouters() {
-    this.router.get("/", todoContorller.getAll);
-    this.router.get("/jalan/:id", todoContorller.getJalanById);
+    // Jalan
+    this.router.get("/jalan/:id", jalanController.getJalanById);
     this.router.post(
       "/jalan",
       authVerifyTokenForAdmin,
@@ -37,18 +37,12 @@ class Todo {
       authVerifyTokenForAdmin,
       jalanController.deleteJalan
     );
-    this.router.post(
-      "/jalan/gambar",
-      this.uplaod.single("picture"),
-      jalanController.addPicture
-    );
     this.router.delete("/delate/jalan/gambar", jalanController.delatePicture);
-    this.router.post("/", todoContorller.createTodo);
-    this.router.delete(
-      "/kecamatan/:id",
-      authVerifyTokenForAdmin,
-      todoContorller.deleteKecamatan
-    );
+
+    // Rambu
+    this.router.get("/", todoContorller.getAll);
+    this.router.get("/rambu/:id", todoContorller.getRambuByPencarian);
+    this.router.post("/", authVerifyTokenForAdmin, todoContorller.createTodo);
     this.router.delete(
       "/rambu/:id",
       authVerifyTokenForAdmin,
@@ -59,22 +53,6 @@ class Todo {
       authVerifyTokenForAdmin,
       todoContorller.updateRambu
     );
-    this.router.put(
-      "/update/kecamatan/:id",
-      authVerifyTokenForAdmin,
-      todoContorller.updateKecamatan
-    );
-    this.router.put(
-      "/add/picture/:id",
-      this.uplaod.single("picture"),
-      todoContorller.addPicture
-    );
-    this.router.put(
-      "/update/picture/:id",
-      this.uplaod.single("picture"),
-      todoContorller.updatePicture
-    );
-    this.router.delete("/delate/picture/:id", todoContorller.delatePicture);
   }
 }
 

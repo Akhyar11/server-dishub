@@ -29,8 +29,7 @@ class AdminController {
       );
 
       await Admin.update({ token: refreshToken }, { where: { username } });
-
-      return res.status(200).json({ accsessToken });
+      return res.status(200).json({ refreshToken });
     } catch (err) {
       console.log(err);
       return res.status(400).json({ msg: "Username tidak ditemukan" });
