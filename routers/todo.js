@@ -29,19 +29,18 @@ class Todo {
       authVerifyTokenForAdmin,
       jalanController.addJalan
     );
-    this.router.get("/jalan/:id", jalanController.getJalanById);
-    this.router.get("/jalan/gambar/:id", jalanController.getPicture);
     this.router.get("/jalan/rambu/:id", jalanController.getJalanWithRambuById);
     this.router.delete(
       "/jalan/:id",
       authVerifyTokenForAdmin,
       jalanController.deleteJalan
     );
-    this.router.delete("/delate/jalan/gambar", jalanController.delatePicture);
 
     // Rambu
     this.router.get("/", todoContorller.getAll);
+    this.router.get("/:id", todoContorller.getJalanRambu);
     this.router.get("/rambu/:id", todoContorller.getRambuByPencarian);
+    this.router.get("/get/rambu/id/:id", todoContorller.getRambu);
     this.router.post("/", authVerifyTokenForAdmin, todoContorller.createTodo);
     this.router.delete(
       "/rambu/:id",
@@ -52,6 +51,16 @@ class Todo {
       "/update/rambu/:id",
       authVerifyTokenForAdmin,
       todoContorller.updateRambu
+    );
+    this.router.post(
+      "/rambu/gambar/:id",
+      this.uplaod.single("jalan"),
+      todoContorller.addGambarStatus
+    );
+    this.router.post("/rambu/gambar/status/", todoContorller.addStatus);
+    this.router.delete(
+      "/delate/jalan/gambar/:id",
+      todoContorller.delatePicture
     );
   }
 }

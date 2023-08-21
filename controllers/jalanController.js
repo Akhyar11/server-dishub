@@ -44,10 +44,10 @@ class JalanController {
         },
       });
       const data = { ruasJalan };
-      res.status(200).json({ data });
+      return res.status(200).json({ data });
     } catch (err) {
       console.log(err);
-      res.status(400).json({ msg: "gagal mengambil data jalan" });
+      return res.status(400).json({ msg: "gagal mengambil data jalan" });
     }
   }
 
@@ -67,10 +67,10 @@ class JalanController {
         },
       });
       const data = { ruasJalan, rambu };
-      res.status(200).json({ data });
+      return res.status(200).json({ data });
     } catch (err) {
       console.log(err);
-      res.status(400).json({ msg: "gagal mengambil data jalan" });
+      return res.status(400).json({ msg: "gagal mengambil data jalan" });
     }
   }
 
@@ -119,56 +119,6 @@ class JalanController {
     } catch (err) {
       console.log(err);
       return res.status(400).json({ msg: "gagal menghapus jalan" });
-    }
-  }
-
-  async getPicture(req, res) {
-    const { id_jalan } = req.params.id;
-    try {
-      const gambar = await GambarJalan.findAll({ where: { id_jalan } });
-      res.status(200).json({ gambar });
-    } catch (err) {
-      res.status(400).json({ msg: "gagal mengambil data gambar" });
-    }
-  }
-
-  async addPicture(req, res) {
-    const path = req.file.destination + req.file.originalname;
-    const id_gambarJalan = "gambar" + new Date().getTime().toString();
-    try {
-      const gambar = process.env.HOST + process.env.PORT + "/" + path;
-      await GambarJalan.create({ id_gambarJalan, id_jalan, gambar });
-
-      return res.status(200).json({ msg: "berhasil upload gambar" });
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({ msg: "gagal upload gambar" });
-    }
-  }
-
-  async delatePicture(req, res) {
-    const id_gambarJalan = req.params.id;
-    try {
-      const gambar = await GambarJalan.findAll({
-        where: {
-          id_gambarJalan,
-        },
-      });
-      const path = gambar[0].gambar.split(
-        process.env.HOST + process.env.PORT + "/"
-      );
-
-      if (path.length == 0)
-        return res.status(200).json({ msg: "berhasil hapus gambar" });
-
-      await GambarJalan.destroy({ where: { id_gambarJalan } });
-
-      fs.unlinkSync(path[1]);
-
-      return res.status(200).json({ msg: "berhasil hapus gambar" });
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({ msg: "gagal hapus gambar" });
     }
   }
 }

@@ -3,18 +3,22 @@ import db from "../utils/connection.js";
 
 const { DataTypes } = Sequelize;
 
-const GambarJalan = db.define(
-  "gambar_jalan",
+const GambarRambu = db.define(
+  "gambar_rambu",
   {
-    id_gambarJalan: {
+    id_gambarRambu: {
       primaryKey: true,
       type: DataTypes.STRING,
     },
-    id_jalan: {
+    id_rambu: {
       type: DataTypes.STRING,
     },
     gambar: {
       type: DataTypes.STRING,
+    },
+    status: {
+      type: DataTypes.ENUM,
+      values: ["direncanakan", "terpasang", "dipelihara"],
     },
   },
   {
@@ -22,4 +26,4 @@ const GambarJalan = db.define(
   }
 );
 
-export default GambarJalan;
+export default GambarRambu;

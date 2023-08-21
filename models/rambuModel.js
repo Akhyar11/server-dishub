@@ -16,7 +16,7 @@ const Rambu = db.define(
     jenis_rambu: {
       type: DataTypes.STRING,
     },
-    gambar: {
+    koordinat: {
       type: DataTypes.STRING,
     },
     posisi: {

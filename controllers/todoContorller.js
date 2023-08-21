@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import Rambu from "../models/rambuModel.js";
-import Kecamatan from "../models/kecamatanModel.js";
 import Jalan from "../models/jalanModel.js";
+import GambarRambu from "../models/gambarJalanModel.js";
 
 class TodoController {
   async getAll(req, res) {
@@ -18,8 +18,55 @@ class TodoController {
     }
   }
 
+  async getJalanRambu(req, res) {
+    const id_jalan = req.params.id;
+    try {
+      const rambu = await Rambu.findAll({
+        where: {
+          id_jalan,
+        },
+      });
+      const ruasJalan = await Jalan.findAll({
+        where: {
+          id_jalan,
+        },
+      });
+
+      const data = { rambu, ruasJalan };
+
+      return res.status(200).json({ data });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ msg: "gagal mengambil data rambu" });
+    }
+  }
+
+  async getRambu(req, res) {
+    const id_rambu = req.params.id;
+    try {
+      const rambu = await Rambu.findAll({
+        where: {
+          id_rambu,
+        },
+      });
+
+      const status = await GambarRambu.findAll({
+        where: {
+          id_rambu,
+        },
+      });
+
+      const data = { rambu, status };
+
+      return res.status(200).json({ data });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ msg: "gagal mengambil data rambu" });
+    }
+  }
+
   async getRambuByPencarian(req, res) {
-    const pencarian = req.params.pencarian;
+    const pencarian = req.params.id;
     try {
       const rambu = await Rambu.findAll({
         where: {
@@ -29,15 +76,15 @@ class TodoController {
         },
       });
 
-      res.status(200).json({ rambu });
+      return res.status(200).json({ rambu });
     } catch (err) {
       console.log(err);
-      res.status(400).json({ msg: "gagal mencari rambu" });
+      return res.status(400).json({ msg: "gagal mencari rambu" });
     }
   }
 
   async createTodo(req, res) {
-    const { id_jalan, jenis_rambu, posisi } = req.body;
+    const { id_jalan, jenis_rambu, posisi, koordinat } = req.body;
     const id_rambu = jenis_rambu + "-" + new Date().getTime().toString();
     try {
       const ruasJalan = await Jalan.findAll({
@@ -53,11 +100,12 @@ class TodoController {
       });
       if (ruasJalan.length > 0) {
         if (rambu.length <= 0) {
-          const pencarian = id_rambu + jenis_rambu + posisi;
+          const pencarian = id_rambu + jenis_rambu + posisi + koordinat;
           await Rambu.create({
             id_rambu,
             id_jalan: ruasJalan[0].id_jalan,
             jenis_rambu,
+            koordinat,
             posisi,
             pencarian,
           });
@@ -75,7 +123,7 @@ class TodoController {
   }
 
   async updateRambu(req, res) {
-    const { jenis_rambu, gambar, posisi } = req.body;
+    const { jenis_rambu, posisi, koordinat } = req.body;
     const id_rambu = req.params.id;
     try {
       const rambu = await Rambu.findAll({
@@ -86,10 +134,10 @@ class TodoController {
       if (rambu.length == 0)
         return res.status(200).json({ msg: "tidak ada rambu" });
 
-      const pencarian = id_rambu + jenis_rambu + posisi;
+      const pencarian = id_rambu + jenis_rambu + posisi + koordinat;
 
       await rambu.update(
-        { jenis_rambu, gambar, posisi, pencarian },
+        { jenis_rambu, posisi, pencarian, koordinat },
         {
           where: {
             id_rambu,
@@ -111,11 +159,83 @@ class TodoController {
           id_rambu,
         },
       });
-
+      await GambarRambu.destroy({
+        where: {
+          id_rambu,
+        },
+      });
       return res.status(200).json({ msg: "berhasil menghapus rambu" });
     } catch (err) {
       console.log(err);
       return res.status(400).json({ msg: "gagal menghapus rambu" });
+    }
+  }
+
+  async addGambarStatus(req, res) {
+    const id_rambu = req.params.id;
+    const path = req.file.destination + req.file.originalname;
+    const id_gambarRambu = "gambar" + new Date().getTime().toString();
+    try {
+      const gambar = process.env.HOST + process.env.PORT + "/" + path;
+      await GambarRambu.create({
+        id_gambarRambu,
+        id_rambu,
+        gambar,
+        status: "direncanakan",
+      });
+
+      return res.status(200).json({ msg: "berhasil upload gambar" });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ msg: "gagal upload gambar" });
+    }
+  }
+
+  async addStatus(req, res) {
+    const status = req.body.status;
+    const id_gambarRambu = req.params.id;
+    try {
+      const gambar = await GambarRambu.findAll({
+        where: {
+          id_gambarRambu,
+        },
+      });
+      const path = gambar[0].gambar;
+
+      if (path.length == 0)
+        return res.status(400).json({ msg: "gambar tidak tersedia" });
+      await GambarRambu.update({ status }, { where: { gambar: path } });
+
+      return res.status(200).json({ msg: "berhasil upload gambar" });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ msg: "gagal upload gambar" });
+    }
+  }
+
+  async delatePicture(req, res) {
+    const id_gambarRambu = req.params.id;
+    try {
+      const gambar = await GambarRambu.findAll({
+        where: {
+          id_gambarRambu,
+        },
+      });
+      const path = gambar[0].gambar.split(
+        process.env.HOST + process.env.PORT + "/"
+      );
+
+      if (path.length == 0)
+        return res.status(200).json({ msg: "berhasil hapus gambar" });
+
+      await GambarRambu.update({ gambar: "" }, { where: { id_gambarRambu } });
+
+      fs.unlinkSync(path[1]);
+
+      return res.status(200).json({ msg: "berhasil hapus gambar" });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ msg: "gagal hapus gambar" });
     }
   }
 }
