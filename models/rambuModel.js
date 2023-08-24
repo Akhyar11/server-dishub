@@ -23,6 +23,9 @@ const Rambu = db.define(
       type: DataTypes.ENUM,
       values: ["kanan", "kiri", "tengah"],
     },
+    status: {
+      type: DataTypes.STRING,
+    },
     pencarian: {
       type: DataTypes.STRING,
     },

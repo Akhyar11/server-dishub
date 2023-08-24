@@ -56,7 +56,13 @@ class TodoController {
         },
       });
 
-      const data = { rambu, status };
+      const ruasJalan = await Jalan.findAll({
+        where: {
+          id_jalan: rambu[0].id_jalan
+        }
+      });
+
+      const data = { rambu, status, ruasJalan };
 
       return res.status(200).json({ data });
     } catch (err) {
@@ -84,7 +90,7 @@ class TodoController {
   }
 
   async createTodo(req, res) {
-    const { id_jalan, jenis_rambu, posisi, koordinat } = req.body;
+    const { id_jalan, jenis_rambu, posisi, koordinat, status } = req.body;
     const id_rambu = jenis_rambu + "-" + new Date().getTime().toString();
     try {
       const ruasJalan = await Jalan.findAll({
@@ -96,17 +102,21 @@ class TodoController {
         where: {
           id_jalan,
           jenis_rambu,
+          posisi,
+          koordinat
         },
       });
       if (ruasJalan.length > 0) {
         if (rambu.length <= 0) {
-          const pencarian = id_rambu + jenis_rambu + posisi + koordinat;
+          const pencarian =
+            id_rambu + jenis_rambu + posisi + koordinat + status;
           await Rambu.create({
             id_rambu,
             id_jalan: ruasJalan[0].id_jalan,
             jenis_rambu,
             koordinat,
             posisi,
+            status,
             pencarian,
           });
           return res.status(200).json({ msg: "berhasil membuat data rambu" });
@@ -123,7 +133,7 @@ class TodoController {
   }
 
   async updateRambu(req, res) {
-    const { jenis_rambu, posisi, koordinat } = req.body;
+    const { jenis_rambu, posisi, koordinat, status } = req.body;
     const id_rambu = req.params.id;
     try {
       const rambu = await Rambu.findAll({
@@ -134,10 +144,10 @@ class TodoController {
       if (rambu.length == 0)
         return res.status(200).json({ msg: "tidak ada rambu" });
 
-      const pencarian = id_rambu + jenis_rambu + posisi + koordinat;
+      const pencarian = id_rambu + jenis_rambu + posisi + koordinat + status;
 
-      await rambu.update(
-        { jenis_rambu, posisi, pencarian, koordinat },
+      await Rambu.update(
+        { jenis_rambu, posisi, pencarian, koordinat, status },
         {
           where: {
             id_rambu,
@@ -200,11 +210,30 @@ class TodoController {
           id_gambarRambu,
         },
       });
+      const rambu = await Rambu.findAll({
+        where: {
+          id_rambu: gambar[0].id_rambu,
+        },
+      });
       const path = gambar[0].gambar;
 
       if (path.length == 0)
         return res.status(400).json({ msg: "gambar tidak tersedia" });
+      const pencarian =
+        rambu[0].id_rambu +
+        rambu[0].jenis_rambu +
+        rambu[0].posisi +
+        rambu[0].koordinat +
+        status;
       await GambarRambu.update({ status }, { where: { gambar: path } });
+      await Rambu.update(
+        { status, pencarian },
+        {
+          where: {
+            id_rambu: gambar[0].id_rambu,
+          },
+        }
+      );
 
       return res.status(200).json({ msg: "berhasil upload gambar" });
     } catch (err) {
