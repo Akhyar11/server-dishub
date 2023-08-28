@@ -29,6 +29,11 @@ class Todo {
       authVerifyTokenForAdmin,
       jalanController.addJalan
     );
+    this.router.post(
+      "/jalan/update/:id",
+      authVerifyTokenForAdmin,
+      jalanController.updateJalan
+    );
     this.router.get("/jalan/rambu/:id", jalanController.getJalanWithRambuById);
     this.router.delete(
       "/jalan/:id",
@@ -57,7 +62,7 @@ class Todo {
       this.uplaod.single("jalan"),
       todoContorller.addGambarStatus
     );
-    this.router.post("/rambu/gambar/status/", todoContorller.addStatus);
+    this.router.post("/rambu/gambar/status/:id", todoContorller.addStatus);
     this.router.delete(
       "/delate/jalan/gambar/:id",
       todoContorller.delatePicture
