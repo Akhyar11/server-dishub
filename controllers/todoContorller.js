@@ -1,4 +1,5 @@
 import { Op } from "sequelize";
+import fs from "fs";
 import Rambu from "../models/rambuModel.js";
 import Jalan from "../models/jalanModel.js";
 import GambarRambu from "../models/gambarJalanModel.js";
@@ -58,8 +59,8 @@ class TodoController {
 
       const ruasJalan = await Jalan.findAll({
         where: {
-          id_jalan: rambu[0].id_jalan
-        }
+          id_jalan: rambu[0].id_jalan,
+        },
       });
 
       const data = { rambu, status, ruasJalan };
@@ -103,7 +104,7 @@ class TodoController {
           id_jalan,
           jenis_rambu,
           posisi,
-          koordinat
+          koordinat,
         },
       });
       if (ruasJalan.length > 0) {
@@ -194,7 +195,7 @@ class TodoController {
         status: "direncanakan",
       });
 
-      return res.status(200).json({ msg: "berhasil upload gambar" });
+      return res.status(200).json({ id_gambarRambu });
     } catch (err) {
       console.log(err);
       return res.status(400).json({ msg: "gagal upload gambar" });
@@ -236,6 +237,36 @@ class TodoController {
       );
 
       return res.status(200).json({ msg: "berhasil upload gambar" });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ msg: "gagal upload gambar" });
+    }
+  }
+
+  async UpdateStatus(req, res) {
+    const id_gambarRambu = req.params.id;
+    const path = req.file.destination + req.file.originalname;
+    const gambar = process.env.HOST + process.env.PORT + "/" + path;
+    try {
+      const last = await GambarRambu.findAll({
+        where: {
+          id_gambarRambu,
+        },
+      });
+      const lastPath = last[0].gambar.split(
+        process.env.HOST + process.env.PORT + "/"
+      );
+      if (lastPath[1] !== undefined) fs.unlinkSync(lastPath[1]);
+      await GambarRambu.update(
+        { gambar },
+        {
+          where: {
+            id_gambarRambu,
+          },
+        }
+      );
+
+      return res.status(200).json({ last });
     } catch (err) {
       console.log(err);
       return res.status(400).json({ msg: "gagal upload gambar" });

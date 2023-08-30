@@ -63,6 +63,11 @@ class Todo {
       todoContorller.addGambarStatus
     );
     this.router.post("/rambu/gambar/status/:id", todoContorller.addStatus);
+    this.router.put(
+      "/update/rambu/gambar/:id",
+      this.uplaod.single("jalan"),
+      todoContorller.UpdateStatus
+    );
     this.router.delete(
       "/delate/jalan/gambar/:id",
       todoContorller.delatePicture

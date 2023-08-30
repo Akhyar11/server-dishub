@@ -1,6 +1,6 @@
 import Admin from "../models/adminModel.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 class AdminController {
   async login(req, res) {
@@ -16,12 +16,6 @@ class AdminController {
       if (!confPass) return res.status(400).json({ msg: "Password salah" });
       const userId = user[0].id;
       const level = user[0].level;
-
-      const accsessToken = jwt.sign(
-        { userId, username, level },
-        process.env.ACCSESS_TOKEN_SECRET,
-        { expiresIn: "20s" }
-      );
       const refreshToken = jwt.sign(
         { userId, username, level },
         process.env.REFRESH_TOKEN_SECRET,
