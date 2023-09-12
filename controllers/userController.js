@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
 export class UserController {
@@ -35,7 +35,7 @@ export class UserController {
 
       res.cookie("token", refreshToken, {
         httpOnly: true,
-        maxAge: 5 * 60 * 1000,
+        maxAge: 10 * 60 * 1000,
       });
 
       return res.status(200).json({ accsessToken });

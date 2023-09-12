@@ -5,30 +5,33 @@ import { Op } from "sequelize";
 
 class JalanController {
   async addJalan(req, res) {
-    const { kecamatan, titik_pangkal, titik_ujung } = req.body;
+    const { kecamatan, jalan, titik_pangkal, titik_ujung } = req.body;
     const id_jalan =
       titik_pangkal + "-" + titik_ujung + "-" + new Date().getTime().toString();
-    const pencarian = kecamatan + titik_pangkal + titik_ujung + id_jalan;
-    console.log({ pencarian });
+    const pencarian =
+      kecamatan + titik_pangkal + titik_ujung + id_jalan + jalan;
     try {
-      const jalan = await Jalan.findAll({
+      const response = await Jalan.findAll({
         where: {
           kecamatan,
+          jalan,
           titik_pangkal,
           titik_ujung,
         },
       });
-      if (jalan.length !== 0)
+      if (response.length !== 0)
         return res.status(400).json({ msg: "jalan sudah tersedia" });
       await Jalan.create({
         id_jalan,
         kecamatan,
+        jalan,
         titik_pangkal,
         titik_ujung,
         pencarian,
       });
       return res.status(200).json({ msg: "data jalan telah dibuat" });
     } catch (err) {
+      console.log({ err });
       res.status(400).json({ msg: "data jalan gagal dibuat" });
     }
   }
@@ -75,18 +78,18 @@ class JalanController {
   }
 
   async updateJalan(req, res) {
-    const { kecamatan, titik_pangkal, titik_ujung } = req.body;
+    const { kecamatan, jalan, titik_pangkal, titik_ujung } = req.body;
     const id_jalan = req.params.id;
     try {
-      const jalan = await Jalan.findAll({
+      const response = await Jalan.findAll({
         where: {
           id_jalan,
         },
       });
-      if (jalan.length == 0)
+      if (response.length == 0)
         return res.status(200).json({ msg: "tidak ada jalan" });
       await Jalan.update(
-        { id_jalan, kecamatan, titik_pangkal, titik_ujung },
+        { id_jalan, jalan, kecamatan, titik_pangkal, titik_ujung },
         {
           where: {
             id_jalan,

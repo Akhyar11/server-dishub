@@ -10,6 +10,9 @@ const Jalan = db.define(
       primaryKey: true,
       type: DataTypes.STRING,
     },
+    jalan: {
+      type: DataTypes.STRING,
+    },
     kecamatan: {
       type: DataTypes.STRING,
     },
