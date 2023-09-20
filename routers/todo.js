@@ -43,6 +43,7 @@ class Todo {
 
     // Rambu
     this.router.get("/", todoContorller.getAll);
+    this.router.get("/riwayat", todoContorller.getAllRiwayat);
     this.router.get("/:id", todoContorller.getJalanRambu);
     this.router.get("/rambu/:id", todoContorller.getRambuByPencarian);
     this.router.get("/get/rambu/id/:id", todoContorller.getRambu);

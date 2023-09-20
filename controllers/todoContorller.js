@@ -9,8 +9,45 @@ class TodoController {
     try {
       const rambu = await Rambu.findAll();
       const ruasJalan = await Jalan.findAll();
+      const status = await GambarRambu.findAll();
 
-      const data = { rambu, ruasJalan };
+      const data = { rambu, ruasJalan, status };
+
+      return res.status(200).json({ data });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ msg: "gagal mengambil data rambu" });
+    }
+  }
+
+  async getAllRiwayat(req, res) {
+    try {
+      const rambu = await Rambu.findAll({
+        order: [["createdAt", "DESC"]]
+      });
+      const ruasJalan = await Jalan.findAll({
+        order: [["createdAt", "DESC"]],
+      });
+
+      const create = [];
+      ruasJalan.map((i) => create.push({ i, name: "jalan" }));
+      rambu.map((i) => create.push({ i, name: "rambu" }));
+
+      const rambuU = await Rambu.findAll({
+        order: [["updatedAt", "DESC"]],
+      });
+      const ruasJalanU = await Jalan.findAll({
+        order: [["updatedAt", "DESC"]],
+      });
+
+      const update = [];
+      ruasJalanU.map((i) => update.push({ i, name: "jalan" }));
+      rambuU.map((i) => update.push({ i, name: "rambu" }));
+
+      const data = {
+        create,
+        update,
+      };
 
       return res.status(200).json({ data });
     } catch (err) {
